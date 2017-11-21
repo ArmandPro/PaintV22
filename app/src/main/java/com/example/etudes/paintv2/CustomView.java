@@ -4,7 +4,6 @@ package com.example.etudes.paintv2;
  * Created by Etudes on 20/11/2017.
  */
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,12 +15,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-
-import java.util.ArrayList;
 
 /**
- * Created by Florian on 20/11/2017.
+ * Created by Florian & Armand on 20/11/2017.
  */
 
 public class CustomView extends View{
@@ -39,18 +35,18 @@ public class CustomView extends View{
     };
 
     //drawing path
-    private Path drawPath;
+    private Path path;
     //drawing and canvas paint
-    private Paint drawPaint, canvasPaint;
+    private Paint paint, canvasPaint;
     //initial color
-    private int paintColor = 0xFF660000;
+    private int colors = 0xFF660000;
     //canvas
-    private Canvas drawCanvas;
+    private Canvas canvas;
     //canvas bitmap
-    private Bitmap canvasBitmap;
+    private Bitmap bitmap;
 
-    public CustomView(Context context, AttributeSet attrs){
-        super(context, attrs);
+    public CustomView(Context context, AttributeSet attributeSet){
+        super(context, attributeSet);
         setupDrawing();
     }
 
@@ -58,33 +54,33 @@ public class CustomView extends View{
     private void setupDrawing(){
 
         //prepare for drawing and setup paint stroke properties
-        drawPath = new Path();
-        drawPaint = new Paint();
-        drawPaint.setColor(paintColor);
-        drawPaint.setAntiAlias(true);
-        drawPaint.setStrokeWidth(20);
-        drawPaint.setStyle(Paint.Style.STROKE);
-        drawPaint.setStrokeJoin(Paint.Join.ROUND);
-        drawPaint.setStrokeCap(Paint.Cap.ROUND);
+        path = new Path();
+        paint = new Paint();
+        paint.setColor(colors);
+        paint.setAntiAlias(true);
+        paint.setStrokeWidth(20);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setStrokeCap(Paint.Cap.ROUND);
         canvasPaint = new Paint(Paint.DITHER_FLAG);
     }
 
-    //size assigned to view
+    //size of view
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        drawCanvas = new Canvas(canvasBitmap);
+        bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(bitmap);
     }
 
-    //draw the view - will be called after touch event
+    //called by the touc event
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
-        canvas.drawPath(drawPath, drawPaint);
+        canvas.drawBitmap(bitmap, 0, 0, canvasPaint);
+        canvas.drawPath(path, paint);
     }
 
-    //register user touches as drawing action
+    //drawing action
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float touchX = event.getX();
@@ -92,21 +88,21 @@ public class CustomView extends View{
         //respond to down, move and up events
         if(fig==true){
 
-            drawCanvas.drawBitmap(bitmapArray[figId],touchX, touchY,null);
+            canvas.drawBitmap(bitmapArray[figId],touchX, touchY,null);
 
 
         }else{
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    drawPath.moveTo(touchX, touchY);
+                    path.moveTo(touchX, touchY);
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    drawPath.lineTo(touchX, touchY);
+                    path.lineTo(touchX, touchY);
                     break;
                 case MotionEvent.ACTION_UP:
-                    drawPath.lineTo(touchX, touchY);
-                    drawCanvas.drawPath(drawPath, drawPaint);
-                    drawPath.reset();
+                    path.lineTo(touchX, touchY);
+                    canvas.drawPath(path, paint);
+                    path.reset();
                     break;
                 default:
                     return false;
@@ -126,26 +122,25 @@ public class CustomView extends View{
         fig = false;
         Log.d("color", color);
         if(color.equalsIgnoreCase("blue")){
-            drawPaint.setColor(Color.rgb(0,191,255));
+            paint.setColor(Color.rgb(0,191,255));
         }else if(color.equals("black")){
-            drawPaint.setColor(Color.BLACK);
+            paint.setColor(Color.BLACK);
         }else if(color.equals("red")){
-            drawPaint.setColor(Color.RED);
+            paint.setColor(Color.RED);
         }else if(color.equals("green")){
-            drawPaint.setColor(Color.rgb(173,255,50));
+            paint.setColor(Color.rgb(173,255,50));
         }else if(color.equals("purple")){
-            drawPaint.setColor(Color.rgb(148,0,211));
+            paint.setColor(Color.rgb(148,0,211));
         }else if(color.equals("pink")){
-            drawPaint.setColor(Color.rgb(255,51,255));
+            paint.setColor(Color.rgb(255,51,255));
         }else{
 
-            drawPaint.setColor(Color.GRAY);
+            paint.setColor(Color.GRAY);
         }
     }
 
 
-
-    //update color
+    //update fig
     public void setFigure(int id){
         invalidate();
         fig = true;

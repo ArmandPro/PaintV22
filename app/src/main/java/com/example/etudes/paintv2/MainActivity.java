@@ -11,9 +11,8 @@ import android.widget.ImageButton;
 
 public class MainActivity extends Activity {
 
-    //custom drawing view
+    // Attributes
     private CustomView customView;
-    //paint color
     private ImageButton currPaint;
 
     @Override
@@ -24,15 +23,12 @@ public class MainActivity extends Activity {
         customView = (CustomView)findViewById(R.id.customView);
 
 
-
-
         final AttributeSet attrs = null;
         final CustomView customView = new CustomView(getApplicationContext(),attrs);
 
 
 
-
-
+        //Color buttons
         @SuppressLint("WrongViewCast")
         final Button buttonBlue = findViewById(R.id.buttonBlue);
         buttonBlue.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +82,7 @@ public class MainActivity extends Activity {
 
 
 
+        //PNG / figure buttons
         final ImageButton buttonNemo = findViewById(R.id.imageButtonNemo);
         buttonNemo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -119,11 +116,7 @@ public class MainActivity extends Activity {
 
 
 
-
-
     }
-
-
 
 
 }
